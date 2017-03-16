@@ -1,4 +1,5 @@
 require './crawler.rb'
+require './blog_entry.rb'
 
 crawler = Crawler.new
-crawler.say_hello(ARGV[0])
+crawler.crawl
