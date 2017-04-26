@@ -1,10 +1,33 @@
-class Crawler
-	def crawl
-		entry = BlogEntry.new
-		entry.author = "Nick"
-		entry.title = "My 10th friggin blog"
+require 'nokogiri'
+require 'mechanize'
+require 'mechanize_adapter'
+require 'active_support/core_ext'
 
-		display_name = "#{entry.title}, By this fool: #{entry.author}"
-		puts display_name
-	end
+class Crawler
+  include MechanizeAdapter
+
+  def crawl(url)
+    blog_page = agent.get(url)
+
+    current_page = 1
+    while current_page < 5
+      puts blog_page.extract('.b-post a')
+
+      next_page_url = blog_page.extract('a.older_posts', attr: :href)
+      blog_page = agent.get(next_page_url)
+
+      current_page += 1
+    end
+  end
+
+  def parse_blogs(page)
+  end
+
+  def agent
+    @mechanize_agent ||= begin 
+      our_mechanize_agent = Mechanize.new
+      our_mechanize_agent.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      our_mechanize_agent
+    end
+  end
 end
