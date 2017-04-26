@@ -1,0 +1,29 @@
+
+#blog-header {
+	color: blue;
+}
+
+.blue-header {
+	color: green;
+}
+
+table {
+	margin-bottom: 5px;
+	margin-top: 5px;
+	margin-right: 4px;
+	margin-left: 4px;
+	font-size: 15px;
+	font-family: sans-serif;
+	width: 200px;
+	text-align: center;
+}
+
+table, td, th {
+	border-width: 1px;
+	border-style: solid;
+	border-color: grey;
+}
+
+th {
+	background-color: grey;
+}
