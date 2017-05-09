@@ -1,0 +1,16 @@
+table {
+	font-weight: bold;
+}
+
+table, td, th {
+	border: 1px dashed pink;
+}
+
+.main {
+	background-color: green;
+}
+
+#main-header {
+	color: red;
+	font: 14px comicsans;
+}

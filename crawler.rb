@@ -1,33 +1,33 @@
-require 'nokogiri'
-require 'mechanize'
 require 'mechanize_adapter'
-require 'active_support/core_ext'
 
 class Crawler
-  include MechanizeAdapter
+	include MechanizeAdapter
 
-  def crawl(url)
-    blog_page = agent.get(url)
+	def crawl(url)
+		link = url
 
-    current_page = 1
-    while current_page < 5
-      puts blog_page.extract('.b-post a')
+		begin
+			blog_page = agent.get(link)
+			
+			parse_blogs(blog_page)
 
-      next_page_url = blog_page.extract('a.older_posts', attr: :href)
-      blog_page = agent.get(next_page_url)
+			link = blog_page.extract('a.older_posts', attr: :href)
+		end while link
+	end
 
-      current_page += 1
-    end
-  end
+	def parse_blogs(page)
+		page.extract_all('.b-post a.btn.btn-lg__trans--color3', attr: :href).each do |read_more_url|
+			read_more_page = agent.get(read_more_url)
 
-  def parse_blogs(page)
-  end
+			puts read_more_page.extract('.post__author')
+		end
+	end
 
-  def agent
-    @mechanize_agent ||= begin 
-      our_mechanize_agent = Mechanize.new
-      our_mechanize_agent.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      our_mechanize_agent
-    end
-  end
+	def agent
+		@mechanize_agent ||= begin 
+			our_mechanize_agent = Mechanize.new
+			our_mechanize_agent.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			our_mechanize_agent
+		end
+	end
 end
